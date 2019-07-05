@@ -25,7 +25,7 @@ screenchange-reload = true
 ;pseudo-transparency = false
 
 [global/wm]
-margin-top = 0
+margin-top = -2
 margin-bottom = 0
 
 [colors]
@@ -66,10 +66,13 @@ module-margin-right = 1
 font-0 = fixed:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
+font-3 = FontAwesome5Free:style=Solid:size=10;0
+font-4 = FontAwesome5Free:style=Regular:size=10;0
+font-5 = FontAwesome5Brands:style=Regular:size=10;0
 
-modules-left = bspwm i3 shortcuts
-modules-center = 
-modules-right = filesystem xbacklight alsa pulseaudio xkeyboard memory cpu wlan eth battery temperature date
+modules-left = shortcuts bspwm i3
+modules-center = xwindow
+modules-right = mpd xbacklight pulseaudio wlan eth memory cpu temperature date
 
 tray-position = right
 tray-padding = 1
@@ -93,39 +96,47 @@ cursor-scroll = ns-resize
 type= custom/menu
 
 fixed-center=false
-expanding-left=true
-format-spacing=2
+format-spacing=1
 
-label-open= Menu
-label-close = x
+label-open= 
+label-close = 
 label-separator = |
-label-mounted-margin = 2
+
+module-margin-left = 5
+
+label-open-padding = 4
+label-close-padding = 4
 label-open-foreground = ${colors.primary}
 label-close-foreground = ${colors.primary}
 label-separator-foreground = ${colors.foreground-alt}
+label-separator-padding = 2
 
 menu-0-0 = Apps
 menu-0-0-exec= menu-open-1
 
-menu-1-0 = VS Code
-menu-1-0-exec = code &
+menu-1-0 = 
+menu-1-0-exec = menu-open-0
+menu-1-1 = 
+menu-1-1-exec = code &
+menu-1-2 = 
+menu-1-2-exec = spotify &
 
-menu-0-1 = PWR
+menu-0-1 = 
 menu-0-1-exec = menu-open-2
 
-menu-2-0 = reboot
+menu-2-0 = 
 menu-2-0-exec = menu-open-3
-menu-2-1 = power off
+menu-2-1 = 
 menu-2-1-exec = menu-open-4
 
-menu-3-0 = reboot
-menu-3-0-exec = shutdown -r now &
-menu-3-1 = cancel
+menu-3-0 = Shutdown ? 
+menu-3-0-exec = shutdown now &
+menu-3-1 = 
 menu-3-1-exec = menu-open-2
 
-menu-4-0 = power off
-menu-4-0-exec = shutdown now &
-menu-4-1 = cancel
+menu-4-0 = Reboot ? 
+menu-4-0-exec = shutdown -r now &
+menu-4-1 = 
 menu-4-1-exec = menu-open-2
 
 [module/xwindow]
@@ -160,20 +171,29 @@ label-unmounted-foreground = ${colors.foreground-alt}
 
 [module/bspwm]
 type = internal/bspwm
+format = <label-state> <label-mode>
 
-label-focused = %index%
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7:
+
+label-focused = %icon%
 label-focused-background = ${colors.background-alt}
 label-focused-underline= ${colors.primary}
 label-focused-padding = 2
 
-label-occupied = %index%
+label-occupied = %icon%
 label-occupied-padding = 2
 
 label-urgent = %index%!
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
-label-empty = %index%
+label-empty = %icon%
 label-empty-foreground = ${colors.foreground-alt}
 label-empty-padding = 2
 
@@ -182,9 +202,20 @@ label-separator = |
 
 [module/i3]
 type = internal/i3
+
 format = <label-state> <label-mode>
+show-all=true
+ws-num=8
 index-sort = true
 wrapping-scroll = false
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7:
 
 ; Only show workspaces on the same output as the bar
 ;pin-workspaces = true
@@ -194,42 +225,54 @@ label-mode-foreground = #000
 label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
-label-focused = WSP %index%
+label-focused = %icon% 
 label-focused-background = ${module/bspwm.label-focused-background}
 label-focused-underline = ${module/bspwm.label-focused-underline}
 label-focused-padding = ${module/bspwm.label-focused-padding}
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = %index%
+label-unfocused = %icon%
 label-unfocused-padding = ${module/bspwm.label-occupied-padding}
 
 ; visible = Active workspace on unfocused monitor
-label-visible = %index%
+label-visible = %icon%
 label-visible-background = ${self.label-focused-background}
 label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %index%
+label-urgent = %icon%
 label-urgent-background = ${module/bspwm.label-urgent-background}
 label-urgent-padding = ${module/bspwm.label-urgent-padding}
 
 ; Separator in between workspaces
 ; label-separator = |
 
-
 [module/mpd]
 type = internal/mpd
-format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
+format-online = <label-song> <icon-prev> <icon-stop> <toggle> <icon-next>
 
 icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
+icon-stop = 
+icon-play = 
+icon-pause = 
 icon-next = 
 
+label-song= %title%
 label-song-maxlen = 25
 label-song-ellipsis = true
+
+bar-progress-width = 45
+bar-progress-format = %{A4:mpdseek+2: A5:mpdseek-2:}%fill%%indicator%%empty%%{A A}
+bar-progress-indicator = |
+bar-progress-indicator-foreground = #ff
+bar-progress-indicator-font = 3
+bar-progress-fill = ─
+bar-progress-fill-foreground = #bb
+bar-progress-fill-font = 3
+bar-progress-empty = ─
+bar-progress-empty-font = 3
+bar-progress-empty-foreground = #44
 
 [module/xbacklight]
 type = internal/xbacklight
@@ -256,18 +299,16 @@ card = intel_backlight
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #f90000
-label = CPU %percentage:2%%
+label =  %percentage:2%%
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #4bffdc
-label = MEM %percentage_used%%
+label =  %percentage_used%%
 
 [module/wlan]
 type = internal/network
@@ -326,11 +367,11 @@ label = %date% %time%
 [module/pulseaudio]
 type = internal/pulseaudio
 
-format-volume = <label-volume> <bar-volume>
+format-volume = 
 label-volume = VOL %percentage%%
 label-volume-foreground = ${root.foreground}
 
-label-muted = 🔇 muted
+label-muted = 
 label-muted-foreground = #666
 
 bar-volume-width = 10
